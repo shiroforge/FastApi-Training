@@ -1,5 +1,8 @@
 # app/main.py
-from fastapi import FastAPI
+from fastapi import FastAPI,Depends, HTTPException
+from sqlalchemy import Session
+from database import get_db,create_tables
+from services.crud import create_user
 
 app = FastAPI(
     title="My FastAPI Application",
@@ -11,7 +14,14 @@ app = FastAPI(
 async def root():
     return {"message": "Hello FastAPI World!"}
 
-# APIのバージョニング例
-@app.get("/api/v1/items/{item_id}")
-async def read_item(item_id: int, q: str = None):
-    return {"item_id": item_id, "q": q}
+# サーバー起動時にテーブル作成
+create_tables()
+
+# ユーザー作成エンドポイント
+@app.post("/users/")
+def create_user_endpoint(username: str, email: str, db: Session = Depends(get_db)):
+    try:
+        user =  create_user(db, username=username, email=email)
+        return {"id": user.id, "username": user.username, "email": user.email}
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=str(e))

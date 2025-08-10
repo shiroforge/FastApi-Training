@@ -1,0 +1,19 @@
+# venv
+.venv/
+venv/
+env/
+fastapi-env/
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+*.egg-info/
+.dist-info/
+.build/
+.pytest_cache/
+.mypy_cache/
+
+# エディタ
+.vscode/
+.idea/

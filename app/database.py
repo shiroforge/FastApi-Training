@@ -19,4 +19,5 @@ def get_db():
 
 # テーブル作成
 def create_tables():
+    from app.models.models import User  # 関数内でimport
     Base.metadata.create_all(bind=engine)

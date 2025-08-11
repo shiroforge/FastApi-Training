@@ -1,8 +1,8 @@
 # app/main.py
 from fastapi import FastAPI,Depends, HTTPException
-from sqlalchemy import Session
-from database import get_db,create_tables
-from services.crud import create_user
+from sqlalchemy.orm import Session
+from app.database import get_db,create_tables
+from app.services.crud import create_user
 
 app = FastAPI(
     title="My FastAPI Application",

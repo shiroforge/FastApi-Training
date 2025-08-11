@@ -1,6 +1,7 @@
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import Session
 
 DATABASE_URL = "sqlite:///./test.db"
 
@@ -19,4 +20,5 @@ def get_db():
 
 # テーブル作成
 def create_tables():
+    from app.models.models import User  # 関数内でimport
     Base.metadata.create_all(bind=engine)

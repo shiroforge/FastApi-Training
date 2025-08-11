@@ -2,7 +2,7 @@
 from fastapi import FastAPI,Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.database import get_db,create_tables
-from app.services.crud import create_user
+from app.services.crud import create_user, get_users
 
 app = FastAPI(
     title="My FastAPI Application",
@@ -25,3 +25,10 @@ def create_user_endpoint(username: str, email: str, db: Session = Depends(get_db
         return {"id": user.id, "username": user.username, "email": user.email}
     except Exception as e:
         raise HTTPException(status_code=400, detail=str(e))
+
+# 全ユーザーを取得　ユーザー作成とはgetとpostで区別している。
+@app.get("/users/")
+def read_users_endpoint(db: Session = Depends(get_db)):
+    users = get_users(db)
+    return [{"id": user.id, "username": user.username, "email": user.email} for user in users]
+

@@ -2,7 +2,7 @@
 from fastapi import FastAPI,Depends, HTTPException
 from sqlalchemy.orm import Session
 from app.database import get_db,create_tables
-from app.services.crud import create_user, get_users
+from app.services.crud import * 
 
 app = FastAPI(
     title="My FastAPI Application",
@@ -31,4 +31,12 @@ def create_user_endpoint(username: str, email: str, db: Session = Depends(get_db
 def read_users_endpoint(db: Session = Depends(get_db)):
     users = get_users(db)
     return [{"id": user.id, "username": user.username, "email": user.email} for user in users]
+
+# 特定のユーザーを取得
+@app.get("/users/{user_id}")
+def read_user_endpoint(user_id: int, db: Session = Depends(get_db)):
+    user = get_user(db, user_id)
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return {"id": user.id, "username": user.username, "email": user.email}
 
